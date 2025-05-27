@@ -32,6 +32,8 @@ sudo mkdir -p /root/x509
 sudo openssl req -outform pem -out /root/x509/ca.crt -newkey ec -pkeyopt ec_paramgen_curve:secp384r1 -keyform pem -keyout /root/x509/ca.key -subj "/CN=Internal Certificate Authority" -addext "keyUsage=critical,digitalSignature,keyEncipherment,nonRepudiation,keyCertSign" -addext "basicConstraints=CA:TRUE,pathlen:0" -x509 -days 1095
 ```
 
+Save the passphrase for the private key to a file in the same directory called `/root/x509/passphrase`.
+
 Refer to `man x509v3_config` for details on key usages and constraints.
 
 Create a system user that clients use to connect to the server and supply CSRs:
