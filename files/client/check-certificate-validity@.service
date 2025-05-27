@@ -1,0 +1,9 @@
+[Unit]
+Description=Check x.509 certificate validity
+ConditionPathExists=/root/x509/%i.crt
+ConditionFileIsExecutable=/usr/bin/openssl
+OnFailure=create-certificate-request@%i.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/openssl x509 -in /root/x509/%i.crt -checkend 604800

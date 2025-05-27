@@ -1,0 +1,22 @@
+[Unit]
+Description=Watch for incoming x.509 certificate request for %i
+
+[Path]
+PathExists=/home/requests/x509/%i.csr
+
+[Install]
+WantedBy=multi-user.target
+root@server:/etc/systemd/system# cat sign-certificate-request@.service
+[Unit]
+Description=Sign x.509 certificate request for %i
+ConditionFileIsExecutable=/usr/bin/openssl
+ConditionPathExists=/home/requests/x509/%i.csr
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/requests/x509
+ExecStart=/usr/bin/echo "Creating new certificate for %i"
+ExecStart=/usr/bin/openssl req -outform pem -out %i.crt -in %i.csr -x509 -days 90 -CA /root/x509/ca.crt -CAkey /root/x509/ca.key -passin file:/root/x509/passphrase -copy_extensions copy -addext "basicConstraints=CA:FALSE"
+ExecStart=/usr/bin/chown requests: %i.crt
+ExecStart=/usr/bin/echo "Removing certificate request"
+ExecStart=/usr/bin/rm %i.csr

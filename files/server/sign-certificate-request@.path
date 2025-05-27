@@ -1,0 +1,8 @@
+[Unit]
+Description=Watch for incoming x.509 certificate request for %i
+
+[Path]
+PathExists=/home/requests/x509/%i.csr
+
+[Install]
+WantedBy=multi-user.target

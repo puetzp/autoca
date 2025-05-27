@@ -1,0 +1,15 @@
+[Unit]
+Description=Create and submit new x.509 certificate request
+ConditionFileIsExecutable=/usr/bin/openssl
+ConditionFileIsExecutable=/usr/bin/rsync
+OnSuccess=fetch-certificate@%i.service
+
+[Service]
+Type=oneshot
+WorkingDirectory=/root/x509
+ExecStart=/usr/bin/openssl req -outform pem -out %i.csr \
+  -newkey ec -pkeyopt ec_paramgen_curve:secp384r1 -keyform pem -keyout %i.key -noenc \
+  -subj "/CN=%i" -addext "subjectAltName=DNS:client.internal" \
+  -addext "keyUsage=critical,digitalSignature,keyEncipherment,nonRepudiation" -addext "extendedKeyUsage=critical,serverAuth" -addext "basicConstraints=CA:FALSE" 
+ExecStart=/usr/bin/openssl req -in %i.csr -noout -text
+ExecStart=/usr/bin/rsync -pvz %i.csr requests@server.internal:%i.csr

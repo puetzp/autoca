@@ -1,0 +1,8 @@
+[Unit]
+Description=Check x.509 certificate existence
+ConditionPathExists=!/root/x509/%i.crt
+OnSuccess=create-certificate-request@%i.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/echo "certificate does not exist, triggering renewal"

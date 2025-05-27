@@ -1,0 +1,9 @@
+[Unit]
+Description=Check x.509 certificate validity
+
+[Timer]
+OnActiveSec=1
+OnCalendar=daily
+
+[Install]
+WantedBy=multi-user.target

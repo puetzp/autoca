@@ -1,0 +1,9 @@
+[Unit]
+Description=Fetch signed x.509 certificate
+ConditionFileIsExecutable=/usr/bin/rsync
+
+[Service]
+Type=oneshot
+WorkingDirectory=/root/x509
+ExecStart=/usr/bin/sleep 1
+ExecStart=/usr/bin/rsync -pvz requests@server.internal:%i.crt .
